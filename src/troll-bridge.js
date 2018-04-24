@@ -3,8 +3,9 @@
 const Bridge = require('./bridge');
 const log = require('./log');
 const map = require('./map');
-const svgMarker = require('./svg-marker');
+//const svgMarker = require('./svg-marker');
 const db = require('./db');
+const colorMode = require('./map/color-mode');
 
 /**
  * A decorated Bridge type, with extra behaviour for interacting on the map.
@@ -70,16 +71,16 @@ class TrollBridge extends Bridge {
       .get(bridge.idbKey)
       .then(val => {
         if (val) {
-          addMarker(svgMarker.unlocked);
+          addMarker(colorMode.getUnlockedIcon());
         } else {
-          addMarker(svgMarker.locked);
+          addMarker(colorMode.getLockedIcon());
         }
         callback(null);
       })
       .catch(err => {
         log.error(`Unable to read key '${bridge.idbkey}' from idb: ${err}`);
         // Default to locked so we at least show something
-        addMarker(svgMarker.locked);
+        addMarker(colorMode.getLockedIcon());
         callback(err);
       });
   }
@@ -99,7 +100,7 @@ class TrollBridge extends Bridge {
     db
       .set(bridge.idbKey, new Date())
       .then(() => {
-        bridge.marker.setIcon(svgMarker.unlocked);
+        bridge.marker.setIcon(colorMode.getUnlockedIcon());
         log.info('Unlocked bridge', bridge);
         callback(null);
       })

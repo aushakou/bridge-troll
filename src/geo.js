@@ -3,6 +3,7 @@
 const log = require('./log');
 const distance = require('./distance');
 const debug = require('./debug');
+const colorMode = require('./map/color-mode');
 
 // Expose `position` events when we move locations
 const EventEmitter = require('events');
@@ -61,6 +62,7 @@ const geoSuccessHandler = position => {
   let lat = position.coords.latitude;
   let lng = position.coords.longitude;
   log.debug(`Geolocation position update: lat=${lat}, lng=${lng}`);
+  colorMode.setPositionsForColorMode(lat, lng);
   module.exports.emit('update', lat, lng);
 };
 

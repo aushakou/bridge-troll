@@ -1,14 +1,10 @@
 'use strict';
 
 const log = require('../log');
-const svgMarker = require('../svg-marker');
+const colorMode = require('./color-mode');
 
 const leaflet = require('leaflet');
 const EventEmitter = require('events').EventEmitter;
-
-const tileUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
-const attribution =
-  '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
 // TODO: I'm not sure what the ideal zoom level is.  Leaflet often uses 13
 // in docs and tutorials.  14 seems to provide a bit more context
@@ -27,9 +23,13 @@ class BaseUI extends EventEmitter {
     mapEl.id = 'map';
     document.body.appendChild(mapEl);
 
+    this.tileUrl = colorMode.getLeafletTileUrl(lat, lng);
+    this.attribution = colorMode.getLeafletAttribution(lat, lng);
+
     // http://leafletjs.com/reference-1.3.0.html#map
     let map = (this.map = leaflet.map(mapEl, this.options));
-    leaflet.tileLayer(tileUrl, { attribution }).addTo(map);
+    this.tileLayer = leaflet.tileLayer(this.tileUrl, { attribution: this.attribution });
+    this.tileLayer.addTo(map);
     map.setView([lat, lng], defaultZoomLevel);
 
     // http://leafletjs.com/reference-1.3.0.html#map-event
@@ -41,11 +41,17 @@ class BaseUI extends EventEmitter {
     this.currentLocationMarker = leaflet
       .marker([lat, lng], {
         title: 'Current Location',
-        icon: svgMarker.location
+        icon: colorMode.getLocationIcon()
       })
       .addTo(map);
 
     log.info(`Map initialized with centre lat=${lat}, lng=${lng}`);
+  }
+
+  update(lat, lng) {
+    this.tileUrl = colorMode.getLeafletTileUrl(lat, lng);
+    this.currentLocationMarker.setIcon(colorMode.getLocationIcon());
+    this.tileLayer.setUrl(this.tileUrl, false);
   }
 
   get zoomLevel() {

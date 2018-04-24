@@ -7,6 +7,7 @@ const geo = require('./geo');
 const map = require('./map');
 const view = require('./view');
 const bridges = require('./bridges');
+const colorMode = require("./map/color-mode");
 
 // Listen for updates to the map's bounding box (viewable area)
 map.on('update', bounds => {
@@ -73,3 +74,9 @@ geo.init();
 document.addEventListener('DOMContentLoaded', () => {
   bridges.init();
 });
+
+const minutes = 0.5;
+const interval = minutes * 60 * 1000;
+setInterval(function() {
+  colorMode.update(map);
+}, interval);

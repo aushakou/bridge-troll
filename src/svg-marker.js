@@ -5,25 +5,43 @@
 const leaflet = require('leaflet');
 
 // Read contents of SVG files from bundle as Data URLs
-const locationSvgUrl = require('../icons/material-icons/location.svg');
-const lockedSvgUrl = require('../icons/material-icons/locked.svg');
-const unlockedSvgUrl = require('../icons/material-icons/unlocked.svg');
+// const whiteLocationSvgUrl = require('../icons/material-icons/location-white.svg');
+const blackLockedSvgUrl = require("../icons/material-icons/locked-black.svg");
+const whiteLockedSvgUrl = require("../icons/material-icons/locked-white.svg");
+const blackUnlockedSvgUrl = require("../icons/material-icons/unlocked-black.svg");
+const whiteUnlockedSvgUrl = require("../icons/material-icons/unlocked-white.svg");
+const whiteLocationSvgUrl = require('../icons/material-icons/location-white.svg');
+const blackLocationSvgUrl = require("../icons/material-icons/location-black.svg");
 
 // All icons share the same size, define it once
 const iconSize = [25, 25];
 
-// Expose custom Leaflet Icons to be used in our markers
-module.exports.location = leaflet.icon({
-  iconUrl: locationSvgUrl,
+module.exports.whiteLocation = leaflet.icon({
+  iconUrl: whiteLocationSvgUrl,
   iconSize
 });
 
-module.exports.locked = leaflet.icon({
-  iconUrl: lockedSvgUrl,
+module.exports.whiteLocked = leaflet.icon({
+  iconUrl: whiteLockedSvgUrl,
   iconSize
 });
 
-module.exports.unlocked = leaflet.icon({
-  iconUrl: unlockedSvgUrl,
+module.exports.whiteUnlocked = leaflet.icon({
+  iconUrl: whiteUnlockedSvgUrl,
+  iconSize
+});
+
+module.exports.blackLocation = leaflet.icon({
+  iconUrl: blackLocationSvgUrl,
+  iconSize
+});
+
+module.exports.blackLocked = leaflet.icon({
+  iconUrl: blackLockedSvgUrl,
+  iconSize
+});
+
+module.exports.blackUnlocked = leaflet.icon({
+  iconUrl: blackUnlockedSvgUrl,
   iconSize
 });
